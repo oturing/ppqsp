@@ -26,9 +26,6 @@
 
 '''
 
-
-from random import shuffle
-
 class Carta(object):
     def __init__(self, valor, naipe):
         self.valor = valor
