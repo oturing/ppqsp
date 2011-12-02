@@ -5,20 +5,20 @@
     >>> for i in [letra for letra in gera_letra()]:
     ...    print i
     ...
-    gerando 'A'
-    gerando 'B'
-    gerando 'C'
+    gerando 'A'...
+    gerando 'B'...
+    gerando 'C'...
     A
     B
     C
     >>> for i in (letra for letra in gera_letra()):
     ...    print i
     ...
-    gerando 'A'
+    gerando 'A'...
     A
-    gerando 'B'
+    gerando 'B'...
     B
-    gerando 'C'
+    gerando 'C'...
     C
 '''
 
