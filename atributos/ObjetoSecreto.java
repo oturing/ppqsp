@@ -1,8 +1,8 @@
 public class ObjetoSecreto {
 
-  private String segredo = "";
+	private String escondido = "";
 
-  public ObjetoSecreto(String texto) {
-    this.segredo = texto;
-  }
+	public ObjetoSecreto(String texto) {
+		this.escondido = texto;
+	}
 }
