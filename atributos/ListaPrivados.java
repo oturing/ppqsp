@@ -12,7 +12,7 @@ public class ListaPrivados {
 				campo.setAccessible(true); // arrombamos a porta
 				try {
 					String valor = (String) campo.get(oSecreto);
-					System.out.println("\t" + campo.getName() + " -> " + valor);
+					System.out.println("\t" + campo.getName() + " = " + valor);
 				}
 				catch (IllegalAccessException e) { 
 					// esta exceção nao acontece porque fizemos setAcessible(true)

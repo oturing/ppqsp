@@ -4,7 +4,6 @@ public class AcessaPrivado {
 
 	public static void main(String[] args) {
 		ObjetoSecreto oSecreto = new ObjetoSecreto("senha super secreta");
-		String tavaEscondido = null;
 		Field campoPrivado = null;
 		try {
 			campoPrivado = ObjetoSecreto.class.getDeclaredField("escondido");
@@ -15,7 +14,7 @@ public class AcessaPrivado {
 		}
 		campoPrivado.setAccessible(true); // arrombamos a porta
 		try {
-			tavaEscondido = (String) campoPrivado.get(oSecreto);
+			String tavaEscondido = (String) campoPrivado.get(oSecreto);
 			System.out.println("oSecreto.escondido = " + tavaEscondido);
 		}
 		catch (IllegalAccessException e) { 
