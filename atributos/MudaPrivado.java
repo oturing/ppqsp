@@ -1,13 +1,12 @@
 import java.lang.reflect.Field;
 
-public class Teste {
+public class MudaPrivado {
 
 	public static void main(String[] args) {
-		ObjetoSecreto oSecreto = new ObjetoSecreto("senha super secreta");
-		String tavaEscondido = null;
+		ObjetoSecreto oSecreto = new ObjetoSecreto("nada");
 		Field campoPrivado = null;
 		try {
-			campoPrivado = ObjetoSecreto.class.getDeclaredField("escondido");
+			campoPrivado = ObjetoSecreto.class.getDeclaredField("oculto");
 		}
 		catch (NoSuchFieldException e) {
 			System.err.println(e);
@@ -15,13 +14,15 @@ public class Teste {
 		}
 		campoPrivado.setAccessible(true); // arrombamos a porta
 		try {
+			String tavaEscondido = (String) campoPrivado.get(oSecreto);
+			System.out.println("oSecreto.oculto = " + tavaEscondido);
+			campoPrivado.set(oSecreto, "novo segredo");
 			tavaEscondido = (String) campoPrivado.get(oSecreto);
+			System.out.println("oSecreto.oculto = " + tavaEscondido);
 		}
 		catch (IllegalAccessException e) { 
 			// esta exceção nao acontece porque fizemos setAcessible(true)
 			System.err.println(e);
-			System.exit(1);
 		}	
-		System.out.println("oSecreto.escondido = " + tavaEscondido);
 	}
 }
