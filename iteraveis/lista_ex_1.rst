@@ -220,8 +220,22 @@ do módulo ``lista_ord.py`` continuam passando, e use a função ``desempenho``
 do mesmo módulo para verificar se a sua implementação realmente ficou mais
 rápida que a original.
 
-5.3. Missão bônus
-------------------
+5.3. Missão bônus 1
+--------------------
+
+Implemente o método ``ListaOrdenada.add`` para incluir um item na posição
+correta de uma lista ordenada. Note que já há doctests prontos para verificar
+o método ``add``, mas todos (exceto o primeiro) estão desligados com a
+diretiva ``# doctest: +SKIP``.
+
+Pergunta de arquiteto: no módulo ``collections`` existe também uma classe
+abstrata ``MutableSequence``, com métodos abstratos como ``__setitem__`` e
+``insert`` e mixins como ``append``, ``pop`` e ``remove``. Porque não fizemos
+nossa ``ListaOrdenada`` uma subclasse de ``MutableSequence``, mas adotamos o
+nome do método ``add`` da classe ``MutableSet``?
+
+5.4. Missão bônus 2
+--------------------
 
 Na verdade, a função ``busca_bin`` faz mais do que dizer se o item existe: ela
 informa a posição do item. Aproveitando este fato, refatore o código do
