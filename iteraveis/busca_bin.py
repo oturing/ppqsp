@@ -1,0 +1,1 @@
+../../solucoes/ppqsp/iteraveis/busca_bin.py
