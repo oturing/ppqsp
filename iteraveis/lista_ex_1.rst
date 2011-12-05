@@ -85,10 +85,10 @@ O que faz o código abaixo? Qual a resposta que aparece no lugar de «1»? ::
     «1»
 
 3.2. Que resposta apareceria no lugar de «1» se não fosse usado o filtro
-`if` na expressão geradora acima?
+``if`` na expressão geradora acima?
 
 3.3. Para verificar se o conjunto ``fox_letters`` realmente contém todas as
-letras do alfabeto, podemos verificar este conjunto é igual ao conjunto das
+letras do alfabeto, podemos verificar se este conjunto é igual ao conjunto das
 letras ASCII maíusculas que o Python conhece. Para fazer esta verificação, o
 que devemos escrever no lugar de «1», e que resposta aparecerá em «2»? ::
 
@@ -172,14 +172,14 @@ Pela documentação do Python, e pelo UML mostrado em aula, notamos que a classe
 
 Isso significa que uma subclasse concreta de ``Sequence`` só precisa
 implementar ``__getitem__`` para poder herdar automaticamente as
-implementações dos 5 métodos mixins que mencionados acima.
+implementações dos 5 métodos mixin mencionados acima.
 
 Claro que esta conveniência tem um preço, afinal não existe almoço de graça
 (até no *Bom Prato* custa R$ 1). O preço é que a implementação possível para
 ``__contains__``, ``index`` e ``count``, a partir apenas da funcionalidade do
 ``__getitem__`` envolverá necessariamente uma busca linear.
 
-Por exemplo, considerando um uma subclasse concreta ``ListaOrdenada`` de
+Por exemplo, considerando uma subclasse concreta ``ListaOrdenada`` de
 ``Sequence``, implementando apenas o método ``__getitem__``, vamos criar uma
 instância ``lo`` de ``ListaOrdenada``, contendo um milhão de itens::
 
@@ -191,17 +191,17 @@ herdado de ``Sequence``::
     >>> 500000 in lo
     True
 
-Porém, como a implementação *mixin* de ``__contains___`` só pode contar com a
-implementação concreta de ``__getitem__``, para responder a pergunta acima
-Python terá que percorrer 500.000 itens. E para esta outra pergunta, Python
-terá que percorrer todos os 1.000.000 de itens::
+Porém, a implementação mixin de ``__contains___`` só pode contar com a
+implementação concreta de ``__getitem__``. Então, para responder a pergunta
+acima Python terá que percorrer 500.000 itens. E para esta outra pergunta,
+Python terá que percorrer todos os 1.000.000 de itens::
 
     >>> -1 in lo
     False
 
-Porém, sabendo que os itens de uma ``ListaOrdenada`` estão em ordem
+No entanto, sabendo que os itens de uma ``ListaOrdenada`` estão em ordem
 ascendente, é possível fazer uma implementação muito mais eficiente de
-``__contains___``, usando uma busca binária.
+``__contains___`` usando uma busca binária.
 
 5.2 Sua missão
 ---------------
@@ -243,7 +243,7 @@ E finalmente, usando TDD, implemente uma versão eficiente do método
 uma ``ListaOrdenada``. Seu primeiro teste deve verificar o caso mais simples:
 se ``count`` devolve 0 quando o item não ocorre na lista. Depois implemente
 testes e a funcionalidade para quando só existe um item, e só então ataque o
-problema de vários itens, sempre escrevendo o teste primeiro.
+problema de vários itens, sempre escrevendo os testes primeiro.
 
 ----
 
