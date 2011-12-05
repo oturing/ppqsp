@@ -1,5 +1,7 @@
 # coding: utf-8
 
+# Código testado com Python 2.7, 3.2, PyPy(1.7) 2.7 e Jython 2.5.2
+
 """
     >>> l = []
     >>> busca_bin(l, 0)
@@ -79,7 +81,7 @@ def busca_index(seq, item):
 
 def desempenho():
     import sys
-    from timeit import repeat
+    from timeit import Timer
     print(sys.version)
     tam = 10**6
     expr = '''b(l, %d), b(l, %d), b(l, %d)''' % (0, tam/2, tam)
@@ -87,8 +89,8 @@ def desempenho():
         prep = '\n'.join([
             '''from __main__ import %s as b\n''' % nome_busca,
             '''l = list(range(%d))''' % tam]) # Python 2 e 3: list(range(n))
-        res = min(repeat(expr, prep, number=10))
-        print('{0:>15}: {1:12.8f}'.format(nome_busca, res))
+        res = min(Timer(expr, prep).repeat(number=10))
+        print('%15s: %12.8f' % (nome_busca, res))
 
 def teste():
     import doctest
