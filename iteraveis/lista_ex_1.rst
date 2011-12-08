@@ -80,7 +80,7 @@ que usa todas as letras do alfabeto inglês.
 O que faz o código abaixo? Qual a resposta que aparece no lugar de «1»? ::
 
     >>> fox = 'The quick brown fox jumps over the lazy dog.'
-    >>> fox_letters = set(l.upper() for l in q if l.isalpha())
+    >>> fox_letters = set(l.upper() for l in fox if l.isalpha())
     >>> len(fox_letters)
     «1»
 
