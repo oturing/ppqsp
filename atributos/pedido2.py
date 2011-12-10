@@ -1,13 +1,12 @@
 # coding: utf-8
 
 """
-Exemplo de uma classe com propriedades
+Exemplo de uma classe com descritor
 
-A classe ItemPedido deve ser instanciada com os dados
-essenciais que sao: descricao do item, quantidade e 
-preco unitario.
+A classe ItemPedido deve ser instanciada com os dados essenciais que sao:
+descricao do item, preco unitario e quantidade.
 
-    >>> bolas = ItemPedido('bola de golf', 10, 2)
+    >>> bolas = ItemPedido('bola de golf', 2, 10)
     >>> bolas.descr
     'bola de golf'
     >>> bolas.qtd
@@ -15,11 +14,11 @@ preco unitario.
 	
 O atributo qtd de um ItemPedido nunca pode ser < 1:
 
-    >>> duendes = ItemPedido('duende verde', 0, 2.99)
+    >>> duendes = ItemPedido('duende verde', 2.99, 0)
     Traceback (most recent call last):
       ...
     TypeError: quantidade deve ser > 0
-    >>> duendes = ItemPedido('duende verde', 13, 2.99)
+    >>> duendes = ItemPedido('duende verde', 2.99, 13)
     >>> duendes.qtd
     13
     >>> duendes.qtd = -1
@@ -33,7 +32,7 @@ O atributo qtd de um ItemPedido nunca pode ser < 1:
 Se o argumento qtd for None, eh usado um valor default, definido
 na classe:
 
-    >>> unicornio = ItemPedido('unicornio', None, 199000)
+    >>> unicornio = ItemPedido('unicornio', 199000)
     >>> unicornio.qtd
     1
 
@@ -61,7 +60,7 @@ class ItemPedido(object):
     qtd = Quantidade('qtd')
     qtd_default = 1
 
-    def __init__(self, descr, qtd, pr_unitario):
+    def __init__(self, descr, pr_unitario, qtd=None):
         self.descr = descr
         if qtd is not None:
             self.qtd = qtd
