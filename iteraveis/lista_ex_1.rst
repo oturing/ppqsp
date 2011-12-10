@@ -1,4 +1,3 @@
-
 =============================
 Python para quem sabe Python
 =============================
@@ -139,7 +138,7 @@ Para os exemplos abaixo, usaremos as listas `m` e `n`::
     >>> sum(«6»)
     76
 
-4.4. Calcule o resultado «1»::
+4.2. Calcule o resultado «1»::
 
     >>> sum(a*b for (a,b) in enumerate(n))
     «1»
