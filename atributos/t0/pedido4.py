@@ -18,11 +18,11 @@ o decorator @property para evitar quantidades negativas::
     >>> duendes = ItemPedido('duende verde', 300, -1)
     Traceback (most recent call last):
       ...
-    TypeError: Quantidade deve ser > 0
+    TypeError: qtd deve ser > 0
     >>> duendes = ItemPedido('duende verde', 0, 10)
     Traceback (most recent call last):
       ...
-    TypeError: Quantidade deve ser > 0
+    TypeError: preco_unit deve ser > 0
 
 Queremos que seja proibido atribuir uma quantidade negativa a uma
 instancia de ItemPedido existente::
@@ -36,22 +36,18 @@ instancia de ItemPedido existente::
     >>> lupas.qtd = -10
     Traceback (most recent call last):
       ...
-    TypeError: Quantidade deve ser > 0
+    TypeError: qtd deve ser > 0
 
 
 """
 
 class Quantidade(object):
-    def __init__(self):
-        self.nome_atr = self.__class__.__name__
-        self.nome_atr_interno = '__'+self.nome_atr+str(id(self))
-
     def __get__(self, instance, owner):
-        return getattr(instance, self.nome_atr_interno)
+        return getattr(instance, '__'+self.nome_atr)
 
     def __set__(self, instance, value):
         if value > 0:
-            setattr(instance, self.nome_atr_interno, value)
+            setattr(instance, '__'+self.nome_atr, value)
         else:
             raise TypeError('%s deve ser > 0' % self.nome_atr)
 
@@ -64,10 +60,20 @@ class ItemPedido(object):
     qtd = Quantidade()
     preco_unit = Quantidade()
 
+    def nomear_descritores(self, cls):
+        for nome, valor in cls.__dict__.items():
+            if isinstance(valor, Quantidade):
+                valor.nome_atr = nome
+
     def __init__(self, descr, preco_unit, qtd):
+        self.nomear_descritores(self.__class__)
         self.descr = descr
         self.preco_unit = preco_unit
         self.qtd = qtd
-
+        
     def total(self):
         return self.preco_unit * self.qtd
+
+if __name__=='__main__':
+    import doctest
+    doctest.testmod(optionflags=doctest.REPORT_ONLY_FIRST_FAILURE)
