@@ -64,7 +64,7 @@ class OrderedDescriptor(object):
     __instance_counter = 0
 
     def __new__(cls, *args):
-        new_instance = super(OrderedDescriptor, cls).__new__(cls, *args)
+        new_instance = object.__new__(cls)
         new_instance._instance_index = OrderedDescriptor.__instance_counter
         OrderedDescriptor.__instance_counter += 1
         return new_instance
@@ -94,7 +94,6 @@ class ValidatedDescriptor(OrderedDescriptor):
     def __get__(self, instance, owner):
         return getattr(instance, '__'+self.attr_name)
 
-
 class Quantidade(ValidatedDescriptor):
     def validator(self, instance, value):
         value = int(value)
@@ -112,8 +111,6 @@ class Palavras(ValidatedDescriptor):
             raise TypeError(msg % (self.attr_name, self.min_palavras))
         return value
 
-
-
 class OrderedModelMeta(type):
     def __new__(cls, name, bases, dict):
         dict['_ordered_descriptors'] = sorted([attr
@@ -124,7 +121,6 @@ class OrderedModelMeta(type):
 
 class OrderedModel(object):
     __metaclass__ = OrderedModelMeta
-
 
 class ItemPedido(OrderedModel):
     """um item de um pedido"""
