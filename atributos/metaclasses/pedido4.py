@@ -59,12 +59,12 @@ class ValidatedDescriptor(object):
                     break
             else: # only if the for loop terminates without break
                 assert False, 'descriptor not found in class'
+        # template method pattern: delegar validacao para subclasses
         value = self.validator(instance, value)
         setattr(instance, '__'+self.attr_name, value)
 
     def __get__(self, instance, owner):
         return getattr(instance, '__'+self.attr_name)
-
 
 class Quantidade(ValidatedDescriptor):
     def validator(self, instance, value):

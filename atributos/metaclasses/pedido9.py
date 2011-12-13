@@ -119,7 +119,7 @@ class OrderedModelMeta(type):
 class OrderedModel(object):
     __metaclass__ = OrderedModelMeta
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args):
         for arg, atrib in zip(args, self.list_ordered_descriptors()):
             setattr(self, atrib.attr_name, arg)
 
