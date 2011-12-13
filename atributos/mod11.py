@@ -45,6 +45,10 @@ def testes():
     print s, mod11_cpf(s)
     s = '123454321'
     print s, mod11_cpf(s)
+    s = '010101010'
+    print s, mod11_cpf(s)
+    s = '101010101'
+    print s, mod11_cpf(s)
 
 if __name__=='__main__':
     testes()
