@@ -91,7 +91,6 @@ class ValidatedDescriptor(object):
     def __get__(self, instance, owner):
         return getattr(instance, '__'+self.attr_name)
 
-
 class Quantidade(ValidatedDescriptor):
     def validator(self, instance, value):
         value = int(value)
@@ -108,7 +107,6 @@ class Palavras(ValidatedDescriptor):
             msg = '%s deve ter pelo menos %s palavras'
             raise TypeError(msg % (self.attr_name, self.min_palavras))
         return value
-
 
 class ItemPedido(object):
     """um item de um pedido"""

@@ -60,6 +60,7 @@ from abc import ABCMeta, abstractmethod
 from operator import attrgetter
 
 class OrderedDescriptor(object):
+    __metaclass__ = ABCMeta
 
     __instance_counter = 0
 
