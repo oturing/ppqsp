@@ -37,21 +37,40 @@ O preco também nao pode ser <= 0:
     TypeError: pr_unitario deve ser > 0
 
 """
-class Quantidade(object):
-    def __set__(self, instance, valor):
-        if not hasattr(self, 'nome_atr'):
-            for nome, atr in instance.__class__.__dict__.items():
-                if atr is self:
-                    self.nome_atr = '__'+nome
+
+from abc import ABCMeta, abstractmethod
+
+class ValidatedDescriptor(object):
+    __metaclass__ = ABCMeta
+
+    @abstractmethod
+    def validator(self, instance, value):
+        """Return value or raise TypeError for invalid values
+
+        This method is invoked by the __set__ method of the descriptor.
+        Parameters are the same for __set__: self, instance, value.
+        """
+
+    def __set__(self, instance, value):
+        if not hasattr(self, 'attr_name'):
+            for name, attr in instance.__class__.__dict__.items():
+                if attr is self:
+                    self.attr_name = name
                     break
             else: # only if the for loop terminates without break
                 assert False, 'descriptor not found in class'
-        if valor < 1:
-            raise TypeError('%s deve ser > 0' % self.nome_atr[2:])
-        setattr(instance, self.nome_atr, valor)
+        value = self.validator(instance, value)
+        setattr(instance, '__'+self.attr_name, value)
 
     def __get__(self, instance, owner):
-        return getattr(instance, self.nome_atr)
+        return getattr(instance, '__'+self.attr_name)
+
+
+class Quantidade(ValidatedDescriptor):
+    def validator(self, instance, value):
+        if value < 1:
+            raise TypeError('%s deve ser > 0' % self.attr_name)
+        return value
 
 class ItemPedido(object):
     """um item de um pedido"""

@@ -45,14 +45,14 @@ E a descricao deve ter pelo menos duas palavras:
     TypeError: descr deve ter pelo menos 2 palavras
 
 
-Podemos obter a lista dos descritores de ItemPedido:
+Podemos obter a lista dos descritores de ItemPedido, na ordem em que
+foram declarados em ItemPedido:
 
     >>> ItemPedido.listar_descritores()
+             qtd : Quantidade
            descr : Palavras
      pr_unitario : Quantidade
-             qtd : Quantidade
 
-Mas os descritores não aparecem na ordem em que foram declarados.
 
 """
 
@@ -60,6 +60,14 @@ from abc import ABCMeta, abstractmethod
 
 class ValidatedDescriptor(object):
     __metaclass__ = ABCMeta
+
+    __instance_counter = 0
+
+    def __new__(cls, *args):
+        new_instance = super(ValidatedDescriptor, cls).__new__(cls, *args)
+        new_instance._instance_index = ValidatedDescriptor.__instance_counter
+        ValidatedDescriptor.__instance_counter += 1
+        return new_instance
 
     @abstractmethod
     def validator(self, instance, value):
@@ -114,7 +122,9 @@ class ItemPedido(object):
 
     @classmethod
     def listar_descritores(cls):
-        for nome, atr in cls.__dict__.items():
-            if isinstance(atr, ValidatedDescriptor):
-                print '%12s : %s' % (nome, atr.__class__.__name__)
+        lista_descr = [(atr._instance_index, nome, atr)
+                        for nome, atr in cls.__dict__.items()
+                        if isinstance(atr, ValidatedDescriptor)]
+        for index, nome, atr in sorted(lista_descr):
+            print '%12s : %s' % (nome, atr.__class__.__name__)
 

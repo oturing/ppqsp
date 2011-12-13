@@ -31,10 +31,28 @@ O atributo qtd de um ItemPedido nunca pode ser <= 0:
 
 O preco também nao pode ser <= 0:
 
-    >>> saci = ItemPedido('saci', -1, 10)
+    >>> saci = ItemPedido('saci perere', -1, 10)
     Traceback (most recent call last):
       ...
     TypeError: pr_unitario deve ser > 0
+
+
+E a descricao deve ter pelo menos duas palavras:
+
+    >>> saci = ItemPedido('saci', -1, 10)
+    Traceback (most recent call last):
+      ...
+    TypeError: descr deve ter pelo menos 2 palavras
+
+
+Podemos obter a lista dos descritores de ItemPedido:
+
+    >>> ItemPedido.listar_descritores()
+           descr : Palavras
+     pr_unitario : Quantidade
+             qtd : Quantidade
+
+Mas os descritores não aparecem na ordem em que foram declarados.
 
 """
 
@@ -65,20 +83,38 @@ class ValidatedDescriptor(object):
     def __get__(self, instance, owner):
         return getattr(instance, '__'+self.attr_name)
 
-
 class Quantidade(ValidatedDescriptor):
     def validator(self, instance, value):
+        value = int(value)
         if value < 1:
             raise TypeError('%s deve ser > 0' % self.attr_name)
+        return value
+
+class Palavras(ValidatedDescriptor):
+    def __init__(self, min_palavras):
+        self.min_palavras = min_palavras
+
+    def validator(self, instance, value):
+        if len(value.split()) < self.min_palavras:
+            msg = '%s deve ter pelo menos %s palavras'
+            raise TypeError(msg % (self.attr_name, self.min_palavras))
         return value
 
 class ItemPedido(object):
     """um item de um pedido"""
 
     qtd = Quantidade()
+    descr = Palavras(2)
     pr_unitario = Quantidade()
 
     def __init__(self, descr, pr_unitario, qtd):
         self.descr = descr
         self.qtd = qtd
         self.pr_unitario = pr_unitario
+
+    @classmethod
+    def listar_descritores(cls):
+        for nome, atr in cls.__dict__.items():
+            if isinstance(atr, ValidatedDescriptor):
+                print '%12s : %s' % (nome, atr.__class__.__name__)
+

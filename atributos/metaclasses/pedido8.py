@@ -81,14 +81,7 @@ class ValidatedDescriptor(OrderedDescriptor):
         Parameters are the same for __set__: self, instance, value.
         """
 
-    def __set__(self, instance, value):
-        if not hasattr(self, 'attr_name'):
-            for name, attr in instance.__class__.__dict__.items():
-                if attr is self:
-                    self.attr_name = name
-                    break
-            else: # only if the for loop terminates without break
-                assert False, 'descriptor not found in class'
+    def __set__(self, instance, value): # template method pattern
         value = self.validator(instance, value)
         setattr(instance, '__'+self.attr_name, value)
 
@@ -114,14 +107,21 @@ class Palavras(ValidatedDescriptor):
 
 class OrderedModelMeta(type):
     def __new__(cls, name, bases, dict):
-        dict['_ordered_descriptors'] = sorted([attr
-                        for attr in dict.values()
-                        if isinstance(attr, OrderedDescriptor)],
-                    key=attrgetter('_instance_index'))
+        ordered_descriptors = []
+        for name, attr in dict.items():
+            if isinstance(attr, OrderedDescriptor):
+                ordered_descriptors.append(attr)
+                attr.attr_name = name
+        ordered_descriptors.sort(key=attrgetter('_instance_index'))
+        dict['_ordered_descriptors'] = ordered_descriptors
         return type.__new__(cls, name, bases, dict)
 
 class OrderedModel(object):
     __metaclass__ = OrderedModelMeta
+
+    @classmethod
+    def list_ordered_descriptors(cls):
+        return cls._ordered_descriptors
 
 class ItemPedido(OrderedModel):
     """um item de um pedido"""
@@ -137,6 +137,6 @@ class ItemPedido(OrderedModel):
 
     @classmethod
     def listar_descritores(cls):
-        for atr in cls._ordered_descriptors:
+        for atr in cls.list_ordered_descriptors():
             print '%12s : %s' % (atr.attr_name, atr.__class__.__name__)
 

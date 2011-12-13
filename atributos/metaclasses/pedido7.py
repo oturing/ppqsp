@@ -57,17 +57,21 @@ foram declarados em ItemPedido:
 """
 
 from abc import ABCMeta, abstractmethod
+from operator import attrgetter
 
-class ValidatedDescriptor(object):
+class OrderedDescriptor(object):
     __metaclass__ = ABCMeta
 
     __instance_counter = 0
 
     def __new__(cls, *args):
-        new_instance = super(ValidatedDescriptor, cls).__new__(cls, *args)
-        new_instance._instance_index = ValidatedDescriptor.__instance_counter
-        ValidatedDescriptor.__instance_counter += 1
+        new_instance = object.__new__(cls)
+        new_instance._instance_index = OrderedDescriptor.__instance_counter
+        OrderedDescriptor.__instance_counter += 1
         return new_instance
+
+class ValidatedDescriptor(OrderedDescriptor):
+    __metaclass__ = ABCMeta
 
     @abstractmethod
     def validator(self, instance, value):
@@ -108,7 +112,18 @@ class Palavras(ValidatedDescriptor):
             raise TypeError(msg % (self.attr_name, self.min_palavras))
         return value
 
-class ItemPedido(object):
+class OrderedModelMeta(type):
+    def __new__(cls, name, bases, dict):
+        dict['_ordered_descriptors'] = sorted([attr
+                        for attr in dict.values()
+                        if isinstance(attr, OrderedDescriptor)],
+                    key=attrgetter('_instance_index'))
+        return type.__new__(cls, name, bases, dict)
+
+class OrderedModel(object):
+    __metaclass__ = OrderedModelMeta
+
+class ItemPedido(OrderedModel):
     """um item de um pedido"""
 
     qtd = Quantidade()
@@ -122,9 +137,6 @@ class ItemPedido(object):
 
     @classmethod
     def listar_descritores(cls):
-        lista_descr = [(atr._instance_index, nome, atr)
-                        for nome, atr in cls.__dict__.items()
-                        if isinstance(atr, ValidatedDescriptor)]
-        for index, nome, atr in sorted(lista_descr):
-            print '%12s : %s' % (nome, atr.__class__.__name__)
+        for atr in cls._ordered_descriptors:
+            print '%12s : %s' % (atr.attr_name, atr.__class__.__name__)
 
