@@ -18,16 +18,16 @@ except OSError:
 os.mkdir(DESTINO)
 
 t0 = time()
-baixar = set()
 qt_bytes = 0
 qt_baixar = 0
+baixar = set()
 
 def handle_request(response):
     global qt_bytes
     if response.error:
         print "Error:", response.error
     else:
-        nome = response.request.url.replace(BASE_URL, '')
+        nome = response.request.url[len(BASE_URL):]
         with open(DESTINO+nome, 'wb') as img_local:
             img_local.write(response.body)
         qt_bytes += len(response.body)

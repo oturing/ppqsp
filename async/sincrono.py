@@ -18,6 +18,7 @@ os.mkdir(DESTINO)
 
 t0 = time()
 qt_bytes = 0
+qt_baixar = 0
 
 with open('bandeiras.txt') as nomes:
     ateh_b = takewhile(lambda s: s[0] in 'ab', nomes)
@@ -30,15 +31,18 @@ with open('bandeiras.txt') as nomes:
             img_local.write(img)
             qt_bytes += len(img)
         img_orig.close()
+	qt_baixar = index+1
 
-print qt_bytes, 'bytes baixados em %s arquivos' % (index+1)
+print qt_bytes, 'bytes baixados em %s arquivos' % qt_baixar
 print 'tempo transcorrido:', time()-t0
 
 """
-...
-29 bc-lgflag.gif
-30 bv-lgflag.gif
-31 br-lgflag.gif
-228410 bytes baixados em 31 arquivos
-tempo transcorrido: 43.5865662098
+sincrono.py:
+    ...
+    29 bc-lgflag.gif
+    30 bv-lgflag.gif
+    31 br-lgflag.gif
+    228410 bytes baixados em 31 arquivos
+    tempo transcorrido: 43.5865662098
 """
+
