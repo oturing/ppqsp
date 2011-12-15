@@ -30,6 +30,8 @@ def buscar(index, nome):
     if response.error:
         print "Error:", response.error
     else:
+        # nao precisamos mais redescobrir o nome do arquivo pois
+        # continuamos na mesma funcao, nao perdemos o contexto
         # nome = response.request.url[len(BASE_URL):]
         print index+1, nome
         with open(DESTINO+nome, 'wb') as img_local:
