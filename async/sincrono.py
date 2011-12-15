@@ -39,10 +39,11 @@ print 'tempo transcorrido:', time()-t0
 """
 sincrono.py:
     ...
-    29 bc-lgflag.gif
-    30 bv-lgflag.gif
-    31 br-lgflag.gif
-    228410 bytes baixados em 31 arquivos
-    tempo transcorrido: 43.5865662098
+    36 bv-lgflag.gif
+    37 bx-lgflag.gif
+    38 by-lgflag.gif
+    262865 bytes baixados em 38 arquivos
+    tempo transcorrido: 41.6797399521
+
 """
 
