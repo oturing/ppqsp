@@ -139,5 +139,5 @@ class ItemPedido(OrderedModel):
     @classmethod
     def listar_descritores(cls):
         for atr in cls.list_ordered_descriptors():
-            print '%12s : %s' % (atr.attr_name, atr.__class__.__name__)
+            print '%12s : %s' % (atr.attr_name, type(atr).__name__)
 
