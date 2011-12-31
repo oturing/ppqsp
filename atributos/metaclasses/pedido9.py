@@ -53,6 +53,9 @@ foram declarados em ItemPedido:
            descr : Palavras
      pr_unitario : Quantidade
 
+    >>> ItemPedido.__name__
+    'ItemPedido'
+
 
 """
 
@@ -81,7 +84,7 @@ class ValidatedDescriptor(OrderedDescriptor):
         Parameters are the same for __set__: self, instance, value.
         """
 
-    def __set__(self, instance, value): 
+    def __set__(self, instance, value):
         # template method pattern: delegar validacao para subclasses
         value = self.validator(instance, value)
         setattr(instance, '__'+self.attr_name, value)
@@ -109,10 +112,10 @@ class Palavras(ValidatedDescriptor):
 class OrderedModelMeta(type):
     def __new__(cls, name, bases, dict):
         ordered_descriptors = []
-        for name, attr in dict.items():
+        for key, attr in dict.items():
             if isinstance(attr, OrderedDescriptor):
                 ordered_descriptors.append(attr)
-                attr.attr_name = name
+                attr.attr_name = key
         ordered_descriptors.sort(key=attrgetter('_instance_index'))
         dict['_ordered_descriptors'] = ordered_descriptors
         return type.__new__(cls, name, bases, dict)
