@@ -37,15 +37,16 @@ def handle_request(response, index, nome):
 
 http_client = httpclient.AsyncHTTPClient()
 
+def buscar(index, nome):
+    def _buscar(request):
+        handle_request(request, index, nome)
+    return _buscar
+
 with open('bandeiras.txt') as nomes:
     ateh_b = takewhile(lambda s: s[0] in 'ab', nomes)
     for index, nome in enumerate(ateh_b):
         nome = nome.strip()
         baixar.add(nome)
-        def buscar(index, nome):
-            def _buscar(request):
-                handle_request(request, index, nome)
-            return _buscar
         http_client.fetch(BASE_URL+nome, buscar(index, nome))
     qt_baixar = len(baixar)
 
