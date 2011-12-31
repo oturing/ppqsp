@@ -81,7 +81,8 @@ class ValidatedDescriptor(OrderedDescriptor):
         Parameters are the same for __set__: self, instance, value.
         """
 
-    def __set__(self, instance, value): # template method pattern
+    def __set__(self, instance, value): 
+        # template method pattern: delegar validacao para subclasses
         value = self.validator(instance, value)
         setattr(instance, '__'+self.attr_name, value)
 

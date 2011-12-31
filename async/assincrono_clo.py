@@ -27,7 +27,6 @@ def handle_request(response, index, nome):
     if response.error:
         print "Error:", response.error
     else:
-        #nome = response.request.url[len(BASE_URL):]
         print index+1, nome
         with open(DESTINO+nome, 'wb') as img_local:
             img_local.write(response.body)
