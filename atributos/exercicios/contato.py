@@ -1,8 +1,8 @@
 # coding: utf-8
 
 """
-Neste exemplo temos uma classe `Contato` que é inicializada com um nome
-e um e-mail.
+(1) Neste exemplo temos uma classe `Contato` que é inicializada com um
+nome e um e-mail::
 
     >>> c = Contato('Juca', 'juca@lab.tmp.br')
     >>> c.nome
@@ -11,15 +11,15 @@ e um e-mail.
     'juca@lab.tmp.br'
 
 
-O atributo `email` é uma property ou descritor que aceita apenas e-mails
-válidos::
+(2) O atributo `email` é uma property ou descritor que aceita apenas
+e-mails válidos::
 
     >>> c.email = 'x'
     Traceback (most recent call last):
       ...
     ValueError: e-mail invalido 'x'
 
-A validação ocorre também ao instanciar um novo 'Contato'::
+(3) A validação ocorre também ao instanciar um novo 'Contato'::
 
     >>> c = Contato('Yoli', 'y@y')
     Traceback (most recent call last):

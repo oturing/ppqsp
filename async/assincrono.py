@@ -22,7 +22,7 @@ qt_bytes = 0
 qt_baixar = 0
 baixar = set()
 
-def handle_request(response):
+def salvar(response):
     global qt_bytes
     if response.error:
         print "Error:", response.error
@@ -43,7 +43,7 @@ with open('bandeiras.txt') as nomes:
         nome = nome.strip()
         print index+1, nome
         baixar.add(nome)
-        http_client.fetch(BASE_URL+nome, handle_request)
+        http_client.fetch(BASE_URL+nome, salvar)
     qt_baixar = len(baixar)
 
 ioloop.IOLoop.instance().start()

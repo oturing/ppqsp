@@ -1,7 +1,7 @@
 # coding: utf-8
 
 """
-Neste exemplo temos uma classe `Aluno` que é inicializada com um nome
+(1) Neste exemplo temos uma classe `Aluno` que é inicializada com um nome
 e uma data de nascimento em formato ISO-8601. O atributo `nascimento` é
 uma property ou descritor que armazena e devolve um objeto `datetime.date`::
 
@@ -11,7 +11,7 @@ uma property ou descritor que armazena e devolve um objeto `datetime.date`::
     >>> a.nascimento
     datetime.date(2000, 6, 10)
 
-Além da propriedade read/write `nascimento`, instâncias de aluno têm uma
+(2) Além da propriedade read/write `nascimento`, instâncias de aluno têm uma
 propriedade read-only chamada `idade` que devolve o número de anos completos
 desde o nascimento até hoje. Para implementar esta propriedade, usamos a
 função `idade` do módulo `idade.py` presente neste diretório.
@@ -25,7 +25,7 @@ A seguir, testamos a função `idade.idade`, como se hoje fosse o dia
 Como hoje não é 20/6/2010, o exemplo acima funciona devido a um patch
 explicado na função `test`.
 
-Graças a este truque, podemos testar a propriedade `idade` do aluno como
+(3) Graças a este truque, podemos testar a propriedade `idade` do aluno como
 se estivéssemos em 20/6/2010::
 
     >>> a.idade
