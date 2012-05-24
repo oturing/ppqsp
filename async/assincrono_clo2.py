@@ -1,6 +1,8 @@
 from time import time
 from urllib2 import urlopen
 import os
+import shutil
+from itertools import takewhile
 from tornado import httpclient, ioloop
 
 BASE_URL = ('https://www.cia.gov/library/publications/the-world-factbook'
@@ -20,16 +22,16 @@ qt_bytes = 0
 qt_baixou = 0
 baixar = {}
 
-def salvar(response):
+def salvar(response, nome, index):
     global qt_bytes, qt_baixou
-    nome = response.request.url[len(BASE_URL):]
+    #nome = response.request.url[len(BASE_URL):]
     if response.error:
         print "\t*** Erro ao baixar", nome
         pass
     else:
         with open(DESTINO+nome, 'wb') as img_local:
             img_local.write(response.body)
-        print '\t-->', baixar[nome], nome
+        print '\t-->', index, nome
         qt_bytes += len(response.body)
         qt_baixou += 1
     del baixar[nome]
@@ -38,13 +40,18 @@ def salvar(response):
 
 http_client = httpclient.AsyncHTTPClient()
 
+def faz_salvar(nome, index):
+    def _salvar(request):
+        salvar(request, nome, index)
+    return _salvar
+
 with open('bandeiras.txt') as nomes:
     ateh_b = takewhile(lambda s: s[0] in 'a', nomes)
     for index, nome in enumerate(ateh_b):
         nome = nome.strip()
         print index+1, nome
         baixar[nome] = index+1
-        http_client.fetch(BASE_URL+nome, salvar)
+        http_client.fetch(BASE_URL+nome, faz_salvar(nome, index))
 
 ioloop.IOLoop.instance().start()
 
