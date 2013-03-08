@@ -26,11 +26,14 @@ def handle_request(response):
     global qt_bytes
     if response.error:
         print "Error:", response.error
+        print '  Tentando de novo...'
+        print response.request.url
+        http_client.fetch(response.request.url, handle_request)
     else:
         nome = response.request.url[len(BASE_URL):]
         with open(DESTINO+nome, 'wb') as img_local:
             img_local.write(response.body)
-        qt_bytes += len(response.body)
+        qt_bytes = qt_bytes + len(response.body)
         baixar.remove(nome)
         if not baixar:
             ioloop.IOLoop.instance().stop()

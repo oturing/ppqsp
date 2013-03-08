@@ -69,7 +69,7 @@ class ValidatedDescriptor(object):
 class Quantidade(ValidatedDescriptor):
     def validator(self, instance, value):
         if value < 1:
-            raise TypeError('%s deve ser > 0' % self.attr_name)
+            raise ValueError('%s deve ser > 0' % self.attr_name)
         return value
 
 class ItemPedido(object):

@@ -21,17 +21,17 @@ qt_bytes = 0
 qt_baixar = 0
 
 with open('bandeiras.txt') as nomes:
-    ateh_b = takewhile(lambda s: s[0] in 'ab', nomes)
-    for index, nome in enumerate(ateh_b):
+    for index, nome in enumerate(nomes, 1):
+        if nome[0] not in 'ab': continue
         nome = nome.strip()
-        print index+1, nome
+        print index, nome
         img_orig = urlopen(BASE_URL+nome)
         with open(DESTINO+nome, 'wb') as img_local:
             img = img_orig.read()
             img_local.write(img)
             qt_bytes += len(img)
         img_orig.close()
-	qt_baixar = index+1
+	qt_baixar = index
 
 print qt_bytes, 'bytes baixados em %s arquivos' % qt_baixar
 print 'tempo transcorrido:', time()-t0

@@ -114,12 +114,12 @@ class Palavras(ValidatedDescriptor):
         return value
 
 class OrderedModelMeta(type):
-    def __new__(cls, name, bases, dict):
+    def __new__(cls, name, bases, dict_):
         dict['_ordered_descriptors'] = sorted([attr
-                        for attr in dict.values()
+                        for attr in dict_.values()
                         if isinstance(attr, OrderedDescriptor)],
                     key=attrgetter('_instance_index'))
-        return type.__new__(cls, name, bases, dict)
+        return type.__new__(cls, name, bases, dict_)
 
 class OrderedModel(object):
     __metaclass__ = OrderedModelMeta
