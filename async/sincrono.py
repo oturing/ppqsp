@@ -1,8 +1,7 @@
 from time import time
-from urllib2 import urlopen
+from urllib2 import urlopen, URLError
 import os
 import shutil
-from itertools import takewhile
 
 BASE_URL = ('https://www.cia.gov/library/publications/the-world-factbook'
             '/graphics/flags/large/')
@@ -18,7 +17,7 @@ os.mkdir(DESTINO)
 
 t0 = time()
 qt_bytes = 0
-qt_baixar = 0
+qt_baixou = 0
 
 with open('bandeiras.txt') as nomes:
     for index, nome in enumerate(nomes, 1):
