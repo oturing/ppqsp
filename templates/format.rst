@@ -1,17 +1,17 @@
 Para formatar valores, Python tem três mecanismos principais:
 
-- o operador `fmt % o`, inspirado pela função `sprintf` da linguagem C
-- a função `format(o, fmt)`, para formatar um único valor
-- o método `fmt.format(...)`, para formatar e inserir valores em uma string
+- o operador ``fmt % o``, inspirado pela função ``sprintf`` da linguagem C
+- a função ``format(o, fmt)``, para formatar um único valor
+- o método ``fmt.format(...)``, para formatar e inserir valores em uma string
 
-Nos três casos acima, `fmt` é a string que define o gabarito formatação.
+Nos três casos acima, ``fmt`` é a string que define o gabarito formatação.
 
-O método `str.format` é o mais flexível: aceita vários argumentos posicionais
-ounomeados. Para cada argumento de `str.format`, a função `format` é invocada
-e o resultado encaixado nos locais indicados por `{}` no gabarito de
+O método ``str.format`` é o mais flexível: aceita vários argumentos posicionais
+ounomeados. Para cada argumento de ``str.format``, a função ``format`` é invocada
+e o resultado encaixado nos locais indicados por ``{}`` no gabarito de
 formatação.
 
-Primeiro, alguns exemplos da função `format` e seus equivalentes com `%`::
+Primeiro, alguns exemplos da função ``format`` e seus equivalentes com ``%``::
 
     >>> import math
     >>> format(math.pi, '6.3f')
@@ -24,7 +24,7 @@ Primeiro, alguns exemplos da função `format` e seus equivalentes com `%`::
     >>> '%18.2f' % n
     '       12345678.99'
 
-Algumas operações da função `format` não podem ser feitas somente com `%`::
+Algumas operações da função ``format`` não podem ser feitas somente com ``%``::
 
     >>> s = 'Fotografia'
     >>> format(s,'.<16')
@@ -40,9 +40,9 @@ Algumas operações da função `format` não podem ser feitas somente com `%`::
     >>> s.center(16, '.')
     '...Fotografia...'
 
-Porém a função `format` apenas formata um valor de cada vez. Para formatar
+Porém a função ``format`` apenas formata um valor de cada vez. Para formatar
 vários valores, intercalando-os em uma string com partes constantes, usa-se
-o método `str.format`, ou o operador `%`::
+o método ``str.format``, ou o operador ``%``::
 
     >>> fmt = '{0} com 4 casas: {0:.4f}'
     >>> fmt.format(math.pi)
@@ -57,7 +57,7 @@ o método `str.format`, ou o operador `%`::
     >>> '%s com %02d casas: %.*f' % (math.pi, 3, 3, math.pi)
     '3.14159265359 com 03 casas: 3.142'
 
-Na primeira posição dentro dos marcadores `{}` usamos números para
+Na primeira posição dentro dos marcadores ``{}`` usamos números para
 indicar um argumento posicional::
 
     >>> '{0} {1} {2}'.format(2, 3, 5)
@@ -80,7 +80,7 @@ Se argumento selecionado tem atributos, eles também podem ser acessados::
     >>> '%f %f' % ((3j+4).real, (3j+4).imag)
     '4.000000 3.000000'
     
-Se o método `str.format` recebe argumentos nomeados, os nomes podem ser
+Se o método ``str.format`` recebe argumentos nomeados, os nomes podem ser
 usados nos marcadores diretamente, como em uma linguagem de templates::
     
     >>> 'Euro: {EUR}, Real: {BRL}'.format(BRL=0.5, EUR=1.3)
@@ -91,7 +91,7 @@ usados nos marcadores diretamente, como em uma linguagem de templates::
     >>> 'Euro: {0[EUR]}, Real: {0[BRL]}'.format(d)
     'Euro: 1.3496, Real: 0.5457'
 
-Com `%` fica assim::
+Com ``%`` fica assim::
 
     >>> 'Euro: %(EUR)s, Real: %(BRL)s' % d
     'Euro: 1.3496, Real: 0.5457'
@@ -147,7 +147,7 @@ Mais exemplos variados::
     >>> format(12345678.9876,'18.10n')
     '       12345678.99'
 
-Na notação de ``format``, o sinal `%` indica porcentagem (o valor numérico
+Na notação de ``format``, o sinal ``%`` indica porcentagem (o valor numérico
 é multiplicado por 100 para exibição)::
 
     >>> n, t = 15, 42
@@ -163,7 +163,7 @@ O próprio código do formato pode ser parametrizado recursivamente::
     >>> format(2**64,'e')
     '1.844674e+19'
 
-Quando o `locale` suporta, é possível exibir separadores de milhares::
+Quando o ``locale`` suporta, é possível exibir separadores de milhares::
 
     >>> from locale import setlocale, LC_NUMERIC
     >>> setlocale(LC_NUMERIC, 'de_DE.UTF-8')
