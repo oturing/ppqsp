@@ -17,7 +17,6 @@ DESTINO = './bandeiras/'
 
 t0 = time()
 qt_bytes = 0
-qt_baixou = 0
 baixar = {}
 
 def salvar(response):
@@ -32,23 +31,29 @@ def salvar(response):
         with open(DESTINO+nome, 'wb') as img_local:
             img_local.write(response.body)
         qt_bytes = qt_bytes + len(response.body)
-        baixar.remove(nome)
+        baixar.pop(nome)
+        print '-->', nome
         if not baixar:
             ioloop.IOLoop.instance().stop()
 
 http_client = httpclient.AsyncHTTPClient()
 
+ULTIMO = 38
+
 with open('bandeiras.txt') as nomes:
-    ateh_b = takewhile(lambda s: s[0] in 'a', nomes)
-    for index, nome in enumerate(ateh_b):
+    for num, nome in enumerate(nomes, 1):
         nome = nome.strip()
-        print index+1, nome
-        baixar[nome] = index+1
+        print num, nome
+        baixar[nome] = num
         http_client.fetch(BASE_URL+nome, salvar)
+        if num == ULTIMO:
+            break
+
+print '*' * 40, 'FIM DO LOOP DE REQUICOES'
 
 ioloop.IOLoop.instance().start()
 
-print qt_bytes, 'bytes baixados em %s arquivos' % qt_baixou
+print qt_bytes, 'bytes baixados em %s arquivos' % num
 print 'tempo transcorrido:', time()-t0
 
 """
