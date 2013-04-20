@@ -1,26 +1,15 @@
-from time import time
-from urllib2 import urlopen
-import os
+# coding: utf-8
+
 from tornado import httpclient, ioloop
 
-BASE_URL = ('https://www.cia.gov/library/publications/the-world-factbook'
-            '/graphics/flags/large/')
+from utilflags import ler_siglas, salvar, reportar, BASE_URL
 
-DESTINO = './bandeiras/'
-
-#try:
-#    shutil.rmtree(DESTINO)
-#except OSError:
-#    pass
-
-#os.mkdir(DESTINO)
-
-t0 = time()
 qt_bytes = 0
-baixar = {}
+qt_arqs = 0
+conj_baixar = set()
 
-def salvar(response):
-    global qt_bytes, qt_baixou
+def processar(response):
+    global qt_bytes, qt_arqs
     nome = response.request.url[len(BASE_URL):]
     if response.error:
         print "Error:", response.error
@@ -28,49 +17,52 @@ def salvar(response):
         print response.request.url
         http_client.fetch(response.request.url, handle_request)
     else:
-        with open(DESTINO+nome, 'wb') as img_local:
-            img_local.write(response.body)
-        qt_bytes = qt_bytes + len(response.body)
-        baixar.pop(nome)
-        print '-->', nome
-        if not baixar:
+        qt_bytes += salvar(nome, response.body)
+        qt_arqs += 1
+        print '\t\t\t', nome, '--> salvo'
+        conj_baixar.discard(nome)
+        if not conj_baixar:
             ioloop.IOLoop.instance().stop()
 
-http_client = httpclient.AsyncHTTPClient()
+def baixar(qtd):
+    """ busca a quantidade ``qtd`` de bandeiras """
 
-ULTIMO = 38
+    http_client = httpclient.AsyncHTTPClient()
 
-with open('bandeiras.txt') as nomes:
-    for num, nome in enumerate(nomes, 1):
-        nome = nome.strip()
-        print num, nome
-        baixar[nome] = num
-        http_client.fetch(BASE_URL+nome, salvar)
-        if num == ULTIMO:
-            break
+    for num, sigla in enumerate(ler_siglas(qtd), 1):
+        nome = sigla + '-lgflag.gif'
+        print '\t%3d\t%s' % (num, nome)
+        url = BASE_URL+nome
+        conj_baixar.add(nome)
+        http_client.fetch(url, processar)
 
-print '*' * 40, 'FIM DO LOOP DE REQUICOES'
+    ioloop.IOLoop.instance().start()
+    return qt_bytes, qt_arqs
 
-ioloop.IOLoop.instance().start()
+if __name__=='__main__':
+    reportar(baixar)
 
-print qt_bytes, 'bytes baixados em %s arquivos' % num
-print 'tempo transcorrido:', time()-t0
 
 """
-sincrono.py:
-    ...
-    36 bv-lgflag.gif
-    37 bx-lgflag.gif
-    38 by-lgflag.gif
-    262865 bytes baixados em 38 arquivos
-    tempo transcorrido: 41.6797399521
-
-assincrono.py:
-    ...
-    36 bv-lgflag.gif
-    37 bx-lgflag.gif
-    38 by-lgflag.gif
-    262865 bytes baixados em 38 arquivos
-    tempo transcorrido: 5.27639985085
+$ python sincrono.py 10
+baixando 10 arquivos...
+      1 aa-lgflag.gif
+      2 ac-lgflag.gif
+      3 ae-lgflag.gif
+      ...
+96442 bytes baixados em 10 arquivos
+tempo transcorrido: 8.83s
+(tornado.env)lontra:async luciano$ python assincrono.py 10
+baixando 10 arquivos...
+      1 aa-lgflag.gif
+      2 ac-lgflag.gif
+      3 ae-lgflag.gif
+      ...
+            ac-lgflag.gif --> salvo
+            ae-lgflag.gif --> salvo
+            aa-lgflag.gif --> salvo
+            ...
+96442 bytes baixados em 10 arquivos
+tempo transcorrido: 1.23s
 """
 

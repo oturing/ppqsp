@@ -1,49 +1,37 @@
-from time import time
-from urllib2 import urlopen, URLError
-import os
-import shutil
+# coding: utf-8
 
-BASE_URL = ('https://www.cia.gov/library/publications/the-world-factbook'
-            '/graphics/flags/large/')
+import contextlib
+import urllib2
 
-DESTINO = './bandeiras/'
+from utilflags import ler_siglas, salvar, reportar, BASE_URL
 
-try:
-    shutil.rmtree(DESTINO)
-except OSError:
-    pass
+def baixar(qtd):
+    """ busca e salva a quantidade ``qtd`` de bandeiras """
+    qt_bytes = 0
+    qt_arqs = 0
 
-os.mkdir(DESTINO)
-
-t0 = time()
-qt_bytes = 0
-qt_baixou = 0
-
-with open('bandeiras.txt') as nomes:
-    for num, nome in enumerate(nomes, 1):
+    for num, sigla in enumerate(ler_siglas(qtd), 1):
         # baixar bandeiras com inicial 'a' ou 'b'
-        if nome[0] not in 'ab': continue
-        nome = nome.strip()
-        print num, nome
-        img_orig = urlopen(BASE_URL+nome)
-        with open(DESTINO+nome, 'wb') as img_local:
+        nome = sigla + '-lgflag.gif'
+        print '\t%3d\t%s' % (num, nome)
+        url = BASE_URL+nome
+        with contextlib.closing(urllib2.urlopen(url)) as img_orig:
             img = img_orig.read()
-            img_local.write(img)
-            qt_bytes += len(img)
-        img_orig.close()
-	qt_baixou = num
+            qt_bytes += salvar(nome, img)
+            qt_arqs += 1
 
-print qt_bytes, 'bytes baixados em %s arquivos' % qt_baixou
-print 'tempo transcorrido:', time()-t0
+    return qt_bytes, qt_arqs
 
-"""
-sincrono.py:
-    ...
-    36 bv-lgflag.gif
-    37 bx-lgflag.gif
-    38 by-lgflag.gif
-    262865 bytes baixados em 38 arquivos
-    tempo transcorrido: 41.6797399521
+if __name__=='__main__':
+    reportar(baixar)
 
 """
+$ python sincrono.py 3
+baixando 3 arquivos...
+      1 aa-lgflag.gif
+      2 ac-lgflag.gif
+      3 ae-lgflag.gif
+11889 bytes baixados em 3 arquivos
+tempo transcorrido: 12.62s
 
+"""
