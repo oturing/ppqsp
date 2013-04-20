@@ -1,74 +1,49 @@
-from time import time
-from urllib2 import urlopen
-import os
-import shutil
-from itertools import takewhile
+# coding: utf-8
+
 from tornado import httpclient, ioloop
 
-BASE_URL = ('https://www.cia.gov/library/publications/the-world-factbook'
-            '/graphics/flags/large/')
+from utilflags import ler_siglas, salvar, reportar, BASE_URL
 
-DESTINO = './bandeiras/'
-
-try:
-    shutil.rmtree(DESTINO)
-except OSError:
-    pass
-
-os.mkdir(DESTINO)
-
-t0 = time()
 qt_bytes = 0
-qt_baixar = 0
-baixar = set()
+qt_arqs = 0
+conj_baixar = set()
 
-def handle_request(response, index, nome):
-    global qt_bytes
+def processar(response, nome, numero):
+    global qt_bytes, qt_arqs
     if response.error:
-        print "Error:", response.error
+        print 'Erro: ', response.error
+        print '\tTentando de novo...', response.request.url
+        http_client.fetch(response.request.url, handle_request)
     else:
-        print index+1, nome
-        with open(DESTINO+nome, 'wb') as img_local:
-            img_local.write(response.body)
-        qt_bytes += len(response.body)
-        baixar.remove(nome)
-        if not baixar:
+        qt_bytes += salvar(nome, response.body)
+        qt_arqs += 1
+        print '\t\t\t%3d\t%s --> salvo' % (numero, nome)
+        conj_baixar.discard(nome)
+        if not conj_baixar:
             ioloop.IOLoop.instance().stop()
 
-http_client = httpclient.AsyncHTTPClient()
+def faz_processar(nome, numero):
+    def _interna(request):
+        processar(request, nome, numero)
+    return _interna
 
-def buscar(index, nome):
-    def _buscar(request):
-        handle_request(request, index, nome)
-    return _buscar
+def baixar(qtd):
+    """ busca a quantidade ``qtd`` de bandeiras """
 
-with open('bandeiras.txt') as nomes:
-    ateh_b = takewhile(lambda s: s[0] in 'ab', nomes)
-    for index, nome in enumerate(ateh_b):
-        nome = nome.strip()
-        baixar.add(nome)
-        http_client.fetch(BASE_URL+nome, buscar(index, nome))
-    qt_baixar = len(baixar)
+    http_client = httpclient.AsyncHTTPClient()
 
-ioloop.IOLoop.instance().start()
+    for num, sigla in enumerate(ler_siglas(qtd), 1):
+        nome = sigla + '-lgflag.gif'
+        print '\t%3d\t%s' % (num, nome)
+        url = BASE_URL+nome
+        proc = faz_processar(nome, num)
+        conj_baixar.add(nome)
+        http_client.fetch(url, proc)
 
-print qt_bytes, 'bytes baixados em %s arquivos' % qt_baixar
-print 'tempo transcorrido:', time()-t0
+    ioloop.IOLoop.instance().start()
+    return qt_bytes, qt_arqs
 
-"""
-sincrono.py:
-    ...
-    36 bv-lgflag.gif
-    37 bx-lgflag.gif
-    38 by-lgflag.gif
-    262865 bytes baixados em 38 arquivos
-    tempo transcorrido: 41.6797399521
+if __name__=='__main__':
+    reportar(baixar)
 
-assincrono_clo.py:
-    38 by-lgflag.gif
-    34 bt-lgflag.gif
-    37 bx-lgflag.gif
-    262865 bytes baixados em 38 arquivos
-    tempo transcorrido: 5.43455791473
-"""
 
