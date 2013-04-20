@@ -12,9 +12,8 @@ def processar(response):
     global qt_bytes, qt_arqs
     nome = response.request.url[len(BASE_URL):]
     if response.error:
-        print "Error:", response.error
-        print '  Tentando de novo...'
-        print response.request.url
+        print 'Erro: ', response.error
+        print '\tTentando de novo...', response.request.url
         http_client.fetch(response.request.url, handle_request)
     else:
         qt_bytes += salvar(nome, response.body)
