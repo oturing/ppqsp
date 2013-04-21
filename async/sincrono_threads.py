@@ -20,9 +20,13 @@ def baixar_uma(nome, numero):
         print '\t\t\t%3d\t%s --> salvo' % (numero, nome)
         conj_baixar.discard(nome)
 
+# GNU/Linux e Mac OSX suportam poucas centenas de threads
+MAX_THREADS = 100
+
 def baixar(qtd):
     """ busca e salva a quantidade ``qtd`` de bandeiras """
 
+    assert qtd <= MAX_THREADS, 'limite: %s downloads paralelos' % MAX_THREADS
     for num, sigla in enumerate(ler_siglas(qtd), 1):
         # baixar bandeiras com inicial 'a' ou 'b'
         nome = sigla + '-lgflag.gif'
