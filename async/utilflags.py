@@ -5,8 +5,17 @@ import os
 import shutil
 import sys
 
-BASE_URL = ('https://www.cia.gov/library/publications/the-world-factbook'
-            '/graphics/flags/large/') # URL onde ficam as bandeiras originais
+# URL onde ficam as bandeiras originais
+
+BASE_URL = ('https://www.cia.gov/library/publications/'
+            'the-world-factbook/graphics/flags/large/')
+
+# Apache Local em lontra (Mac OS X)
+#BASE_URL = 'http://localhost/~luciano/cia/flags/CIA_Flags_of_the_World_files/'
+
+# $ cd ~/prj/oturing/ppqsp/async/flags/CIA_Flags_of_the_World_files
+# $ python -m SimpleHTTPServer 8000
+#BASE_URL = 'http://localhost:8000/'
 
 DIR_DESTINO = './bandeiras/' # onde serão salvas as bandeiras
 
