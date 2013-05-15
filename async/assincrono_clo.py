@@ -13,7 +13,7 @@ def processar(response, nome, numero):
     if response.error:
         print 'Erro: ', response.error
         print '\tTentando de novo...', response.request.url
-        http_client.fetch(response.request.url, handle_request)
+        httpclient.AsyncHTTPClient().fetch(response.request.url, processar)
     else:
         qt_bytes += salvar(nome, response.body)
         qt_arqs += 1
@@ -36,8 +36,8 @@ def baixar(qtd):
         nome = sigla + '-lgflag.gif'
         print '\t%3d\t%s' % (num, nome)
         url = BASE_URL+nome
-        proc = faz_processar(nome, num)
         conj_baixar.add(nome)
+        proc = faz_processar(nome, num)
         http_client.fetch(url, proc)
 
     ioloop.IOLoop.instance().start()

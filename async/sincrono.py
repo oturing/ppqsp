@@ -11,7 +11,6 @@ def baixar(qtd):
     qt_arqs = 0
 
     for num, sigla in enumerate(ler_siglas(qtd), 1):
-        # baixar bandeiras com inicial 'a' ou 'b'
         nome = sigla + '-lgflag.gif'
         print '\t%3d\t%s' % (num, nome)
         url = BASE_URL+nome

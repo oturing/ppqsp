@@ -11,6 +11,7 @@ conj_baixar = set()
 @gen.engine
 def processar(cliente, nome, numero):
     global qt_bytes, qt_arqs
+    print '\t%3d\t%s' % (numero, nome)
     conj_baixar.add(nome)
     url = BASE_URL+nome
     response = yield gen.Task(cliente.fetch, url)
@@ -33,7 +34,6 @@ def baixar(qtd):
 
     for num, sigla in enumerate(ler_siglas(qtd), 1):
         nome = sigla + '-lgflag.gif'
-        print '\t%3d\t%s' % (num, nome)
         processar(cliente, nome, num)
 
     ioloop.IOLoop.instance().start()

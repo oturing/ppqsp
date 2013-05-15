@@ -14,7 +14,7 @@ def processar(response):
     if response.error:
         print 'Erro: ', response.error
         print '\tTentando de novo...', response.request.url
-        http_client.fetch(response.request.url, handle_request)
+        httpclient.AsyncHTTPClient().fetch(response.request.url, processar)
     else:
         qt_bytes += salvar(nome, response.body)
         qt_arqs += 1
@@ -26,14 +26,14 @@ def processar(response):
 def baixar(qtd):
     """ busca a quantidade ``qtd`` de bandeiras """
 
-    http_client = httpclient.AsyncHTTPClient()
+    cliente = httpclient.AsyncHTTPClient()
 
     for num, sigla in enumerate(ler_siglas(qtd), 1):
         nome = sigla + '-lgflag.gif'
         print '\t%3d\t%s' % (num, nome)
         url = BASE_URL+nome
         conj_baixar.add(nome)
-        http_client.fetch(url, processar)
+        cliente.fetch(url, processar)
 
     ioloop.IOLoop.instance().start()
     return qt_bytes, qt_arqs

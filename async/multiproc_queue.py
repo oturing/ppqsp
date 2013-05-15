@@ -2,7 +2,7 @@
 
 import contextlib
 import urllib2
-import threading
+import multiprocessing
 from Queue import Queue
 
 from utilflags import ler_siglas, salvar, reportar, BASE_URL
@@ -33,7 +33,7 @@ def baixar(qtd):
 
     # criar threads
     for i in range(NUM_THREADS):
-        tarefa = threading.Thread(target=worker)
+        tarefa = multiprocessing.Process(target=worker)
         tarefa.daemon = True
         tarefa.start()
 
