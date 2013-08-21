@@ -37,8 +37,7 @@ def baixar(qtd):
         print '\t%3d\t%s' % (num, nome)
         url = BASE_URL+nome
         conj_baixar.add(nome)
-        proc = faz_processar(nome, num)
-        http_client.fetch(url, proc)
+        http_client.fetch(url, faz_processar(nome, num))
 
     ioloop.IOLoop.instance().start()
     return qt_bytes, qt_arqs
